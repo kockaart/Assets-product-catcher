@@ -1,0 +1,8 @@
+﻿
+PH on linkedin
+
+------------------
+car: kicsit fentebb l�tsz�djon az aut�, cameraviewt m�dos�tom
+csak 3 kontroll bal jobb speed, ha nincs jel visszak�z�pre- crash reload
+restart gomb
+
