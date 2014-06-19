@@ -37,7 +37,6 @@ public class DepthWrapper: MonoBehaviour {
 	private struct frameData
 	{
 		public short[] depthImg;
-		public short[] depthImg2;
 		public bool[] players;
 		public bool[,] segmentation;
 		public int[,] bounds;
@@ -56,7 +55,6 @@ public class DepthWrapper: MonoBehaviour {
 	/// </summary>
 	[HideInInspector]
 	public short[] depthImg;
-	public short[] depthImg2;
 	/// <summary>
 	/// players[i] true iff i has been detected in the frame
 	/// </summary>
@@ -75,7 +73,7 @@ public class DepthWrapper: MonoBehaviour {
 	
 	// Use this for initialization
 	void Awake() {
-	//	DontDestroyOnLoad(transform.gameObject);
+		DontDestroyOnLoad(transform.gameObject);
 	}
 
 	void Start () {
@@ -85,7 +83,6 @@ public class DepthWrapper: MonoBehaviour {
 		for(int ii = 0; ii < storedFrames; ii++){	
 			frameData frame = new frameData();
 			frame.depthImg = new short[320 * 240];
-			frame.depthImg2 = new short[320 * 240];
 			frame.players = new bool[Kinect.Constants.NuiSkeletonCount];
 			frame.segmentation = new bool[Kinect.Constants.NuiSkeletonCount,320*240];
 			frame.bounds = new int[Kinect.Constants.NuiSkeletonCount,4];
@@ -122,7 +119,6 @@ public class DepthWrapper: MonoBehaviour {
 				newSeqmentation = true;
 				frameData frame = (frameData)frameQueue.Dequeue();
 				depthImg = frame.depthImg;
-				depthImg2 = frame.depthImg2;
 				players = frame.players;
 				segmentations = frame.segmentation;
 				bounds = frame.bounds;
@@ -162,7 +158,6 @@ public class DepthWrapper: MonoBehaviour {
 			int yy = ii / 320;
 			//extract the depth and player
 			depthImg[ii] = (short)(kinect.getDepth()[ii] >> 3);
-			depthImg2[ii] = (short)(kinect.getDepth()[ii] >> 3);
 
 			int player = (kinect.getDepth()[ii] & 0x07) - 1;
 			if (player > 0)
@@ -232,7 +227,6 @@ public class DepthWrapper: MonoBehaviour {
 			for(int pxy = 0; pxy < (320 * 239); pxy++)
 			{
 				//get x and y coords
-			//	if(homographyImg[pxy]>0) homographyImg[pxy]=32767;
 				int px = pxy % 320;
 				int py = pxy / 320;
 				if(rotatex==false && rotatey==false)
@@ -274,11 +268,6 @@ public class DepthWrapper: MonoBehaviour {
 				//-limit depth values and set for 0
 				if (depthImg[ii] < tmin) depthImg[ii] = 0;
 				else if (depthImg[ii] > tmax) depthImg[ii] = 0;
-
-				//set for max short value 32767
-				//else depthImg[ii] = 32767;
-
-				depthImg2[ii] =  (short)(32767 - depthImg[ii]);
 				
 				//check if point is tracked, "white" in the 320x240 matrix
 				if (depthImg[ii] >0 & xx > 270)

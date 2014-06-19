@@ -51,7 +51,7 @@ public class Calibrate : MenuBase {
 		
 		//Next Scene
 		if(GUI.Button(readyRect,"Ready")){
-//			gameObject.AddComponent("OutputSignals");
+			//Application.LoadLevel("CompleteScene");
 			GetComponent<OutputSignals>().enabled = true;
 			Destroy (this);
 

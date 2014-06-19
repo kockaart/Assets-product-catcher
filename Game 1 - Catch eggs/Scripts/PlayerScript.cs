@@ -14,7 +14,7 @@ public class PlayerScript : MenuBase {
 	public float currentHorizontal = 0;
 	private float ratio;
 	private float posx;
-	public float sense=4f;
+	public float sense=28f;
 	public string control;
 	public GameObject Head;
 	public GameObject Hand_Left;
@@ -23,11 +23,6 @@ public class PlayerScript : MenuBase {
 //	public GameObject Shoulder_Right;
 //	public GameObject Elbow_Left;
 //	public GameObject Elbow_Right;
-
-	void Awake () {
-		timeawake = (int)Time.fixedTime;
-
-	}
 
 	void Update () {
         //These two lines are all there is to the actual movement..
@@ -42,11 +37,12 @@ public class PlayerScript : MenuBase {
 		
 		currentHorizontal = Mathf.Lerp(currentHorizontal, posx, Time.deltaTime);
 //		transform.Translate (currentHorizontal * speed * Time.deltaTime, 0, 0);
-		float moveInput = -posx * speed * Time.deltaTime * PlayerPrefs.GetFloat("sense");
+		//float moveInput = -posx * speed * Time.deltaTime * PlayerPrefs.GetFloat("sense");
+		float moveInput = -posx * speed * Time.deltaTime * sense;
 
 	//*	transform.position -= new Vector3(moveInput, 0, 0);
-		transform.position = new Vector3((posx*PlayerPrefs.GetFloat("sense")), transform.position.y, transform.position.z);
-		time = (int)Time.fixedTime - timeawake;
+		transform.position = new Vector3((posx*sense), transform.position.y, transform.position.z);
+
 
 
         //Restrict movement between two values
@@ -63,26 +59,23 @@ public class PlayerScript : MenuBase {
     {
 		GUI.skin = menuSkin;
 		GUI.Box(new Rect(0, Screen.height *4 /5, Screen.width /5, Screen.height/5), logo);
-        //We display the game GUI from the playerscript
-        //It would be nicer to have a seperate script dedicated to the GUI though...
-		if (time < PlayerPrefs.GetInt("time"))
-		{
-			GUILayout.Label("Score: " + theScore + "/"+ eggs);
-			GUILayout.Label("Time: " + time + " sec");
-		}
-		else
-		{
-			int score=100*theScore/eggs;
-			GUI.Box (new Rect(0, 270, (float)(Screen.width), (float)(Screen.height)), "You catched " + theScore + " eggs out of " + eggs);
-			GUI.Box (new Rect(0, 370, (float)(Screen.width), (float)(Screen.height)), "Success: " + score +"%");
-
-			if(GUILayout.Button("Try again") ){
-				Application.LoadLevel(1);
+		if (posx != 0) {
+			time = (int)Time.fixedTime - timeawake;
+				//if (time < PlayerPrefs.GetInt("time"))
+			if (time < 60) {
+					GUILayout.Label ("Score: " + theScore + "/" + eggs);
+					GUILayout.Label ("Time: " + time + " sec");
+			} else {
+					int score = 100 * theScore / eggs;
+					GUI.Box (new Rect (0, 270, (float)(Screen.width), (float)(Screen.height)), "You catched " + theScore + " eggs out of " + eggs);
+					GUI.Box (new Rect (0, 370, (float)(Screen.width), (float)(Screen.height)), "Success: " + score + "%");
 			}
-			if(GUILayout.Button("Back to menu") ){
-			//	Destroy(GameObject.Find("Conf")); //Otherwise we'd have two of these..
-				Application.LoadLevel(0);
-			}
+		} 
+		else {
+			timeawake = (int)Time.fixedTime;
+			GUI.Box (new Rect (0, 370, (float)(Screen.width), (float)(Screen.height)), "Come closer and PLAY!");
+			theScore = 0;
+			eggs = 0;
 		}
     }    
 }

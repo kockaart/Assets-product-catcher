@@ -12,20 +12,22 @@ public class SpawnerScript : MonoBehaviour {
 	
 	private float nextEggTime = 1.0f;
 	//time between eggs
-	public float spawnRate = 4.5f;
+	public float spawnRate = 6f;
 	public float rate = 1f;
 	public int timeawake = 0;
 	public int time = 0;
 
 	void Awake () {
 		timeawake = (int)Time.fixedTime;
-		spawnRate = PlayerPrefs.GetFloat("speed");
+		//spawnRate = PlayerPrefs.GetFloat("speed");
+		spawnRate = 6;
 	}
 
 	void Update () {
 		time = (int)Time.fixedTime - timeawake;
-		spawnRate = PlayerPrefs.GetFloat("speed");
-		if (time < PlayerPrefs.GetInt("time") && nextEggTime < Time.time)
+		//spawnRate = PlayerPrefs.GetFloat("speed");
+		//if (time < PlayerPrefs.GetInt("time") && nextEggTime < Time.time)
+		if (time < 60 && nextEggTime < Time.time)
 		{
 			//Speed up the spawnrate for the next egg
 			rate *= 0.99f;

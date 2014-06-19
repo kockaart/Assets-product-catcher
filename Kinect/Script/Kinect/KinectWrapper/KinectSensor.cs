@@ -88,12 +88,10 @@ public class KinectSensor : MonoBehaviour, KinectInterface {
 	
 	void Awake()
 	{
-
 		if (KinectSensor.instance != null)
 		{
 			Debug.Log("There should be only one active instance of the KinectSensor component at at time.");
-           // throw new Exception("There should be only one active instance of the KinectSensor component at a time.");
-			KinectSensor.instance = null;
+            throw new Exception("There should be only one active instance of the KinectSensor component at a time.");
 		}
 		try
 		{
@@ -139,7 +137,7 @@ public class KinectSensor : MonoBehaviour, KinectInterface {
 //			long kinectAngle = (long)(theta * (180 / Mathf.PI));
 //			NativeMethods.NuiCameraSetAngle(kinectAngle);
 			
-//			DontDestroyOnLoad(gameObject);
+			DontDestroyOnLoad(gameObject);
 			KinectSensor.Instance = this;
 			NativeMethods.NuiSetDeviceStatusCallback(new NuiStatusProc(), IntPtr.Zero);
 		}
